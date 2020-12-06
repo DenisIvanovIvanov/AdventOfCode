@@ -1,4 +1,4 @@
-# Day 1: Report Repair
+# Day 5: Binary Boarding
 
 ### Part 1
 
