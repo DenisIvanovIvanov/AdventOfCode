@@ -10,13 +10,7 @@ namespace AdventOfCode2020.Day4
     {
         private readonly HashSet<string> _requiredFields = new HashSet<string>
         {
-            "byr",
-            "iyr",
-            "eyr",
-            "hgt",
-            "hcl",
-            "ecl", 
-            "pid"
+            "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"
         };
 
         private readonly HashSet<string> _validEyeColors = new HashSet<string>
@@ -24,72 +18,29 @@ namespace AdventOfCode2020.Day4
             "amb", "blu", "brn", "gry", "grn", "hzl", "oth"
         };
 
-        private StreamReader _reader;
-        private string _heightRegex = @"(cm|in)\b";
+        private readonly List<string> _validPassports;
+        private readonly string _heightRegex = @"(cm|in)\b";
+        private readonly string _hexColorRegex = @"^#(?:[0-9a-fA-F]{3}){1,2}$";
 
         public string Name => "Day 4";
 
-        public void PartOne()
+        public DayFour()
         {
-            Prepare();
-            int validPassports = 0;
-            List<string> passportFields = new List<string>();
-            while (!_reader.EndOfStream)
-            {
-                string line = _reader.ReadLine();
-                if (!string.IsNullOrEmpty(line))
-                {
-                    foreach (var field in line.Split(' ').Where(f => !f.StartsWith("cid"))) // cid is optional
-                        passportFields.Add(field.Split(':')[0]); // we are not interested in value
-                }
-
-                if (string.IsNullOrEmpty(line) || _reader.EndOfStream)
-                {
-                    if (_requiredFields.All(f => passportFields.Contains(f)))
-                        validPassports++;
-
-                    passportFields.Clear();
-                }
-            }
-
-            _reader.Close();
-            Console.WriteLine(validPassports);
+            _validPassports = GetAllPassportsHavingRequiredKeys();
         }
+
+        public void PartOne() => Console.WriteLine(_validPassports.Count);
 
         public void PartTwo()
         {
-            Prepare();
             int validPassports = 0;
-            List<string> passportFields = new List<string>();
-            while (!_reader.EndOfStream)
+            foreach (var validPassport in _validPassports)
             {
-                string line = _reader.ReadLine();
-                if (!string.IsNullOrEmpty(line))
-                {
-                    foreach (var field in line.Split(' ').Where(f => !f.StartsWith("cid"))) // cid is optional
-                        passportFields.Add(field);
-                }
-
-                if (string.IsNullOrEmpty(line) || _reader.EndOfStream)
-                {
-                    // first check if we have all keys required
-                    if (_requiredFields.All(f => passportFields.Select(f => f.Split(':')[0]).Contains(f)))
-                    {
-                        if (ValidatePassport(passportFields))
-                            validPassports++;
-                    }
-
-                    passportFields.Clear();
-                }
+                if (ValidatePassport(validPassport.Split(' ').ToList()))
+                    validPassports++;
             }
 
-            _reader.Close();
             Console.WriteLine(validPassports);
-        }
-
-        private void Prepare()
-        {
-            _reader = new StreamReader(@".\Day4\input.txt");
         }
 
         private bool ValidatePassport(List<string> passport)
@@ -110,9 +61,10 @@ namespace AdventOfCode2020.Day4
                     "iyr" => ValidateDateRange(value, 2010, 2020),
                     "eyr" => ValidateDateRange(value, 2020, 2030),
                     "hgt" => ValidateHeight(value),
-                    "hcl" => Regex.Match(value, @"^#(?:[0-9a-fA-F]{3}){1,2}$").Success,
+                    "hcl" => Regex.Match(value, _hexColorRegex).Success,
                     "ecl" => _validEyeColors.Contains(value),
                     "pid" => value.Length == 9,
+                    "cid" => true,
                     _ => throw new ArgumentException(nameof(key)),
                 };
             }
@@ -126,45 +78,60 @@ namespace AdventOfCode2020.Day4
             if (match.Success)
             {
                 value = value[0..^2];
-                switch (match.Value)
+                return match.Value switch
                 {
-                    case "cm":
-                        if (int.TryParse(value, out int eyrValue))
-                        {
-                            if (eyrValue < 150 || eyrValue > 193)
-                                return false;
-
-                            return true;
-                        }
-
-                        return false;
-                    case "in":
-                        if (int.TryParse(value, out int inchValue))
-                        {
-                            if (inchValue < 59 || inchValue > 76)
-                                return false;
-
-                            return true;
-                        }
-
-                        return false;
-                    default: return false;
-                }
+                    "cm" => int.TryParse(value, out int eyrValue) && !(eyrValue < 150 || eyrValue > 193),
+                    "in" => int.TryParse(value, out int inchValue) && !(inchValue < 59 || inchValue > 76),
+                    _ => false,
+                };
             }
 
             return false;
         }
 
         private bool ValidateDateRange(string value, int start, int end)
+            => !(value.Length < 4 || value.Length > 4) 
+                && (int.TryParse(value, out int eyrValue) 
+                && !(eyrValue < start || eyrValue > end));
+
+        private List<string> GetAllPassportsHavingRequiredKeys()
         {
-            if (value.Length < 4 || value.Length > 4)
-                return false;
+            var passports = ParsePassports();
+            var validPassports = new List<string>();
 
-            if (int.TryParse(value, out int eyrValue))
-                if (eyrValue < start || eyrValue > end)
-                    return false;
+            foreach (var passport in passports)
+            {
+                var asSingleString = String.Join(' ', passport);
 
-            return true;
+                if (_requiredFields.All(f => asSingleString.Split(' ').Select(f => f.Split(':')[0]).Contains(f)))
+                    validPassports.Add(asSingleString);
+            }
+
+            return validPassports;
+        }
+
+        private List<List<string>> ParsePassports()
+        {
+            var result = new List<List<string>>()
+            {
+                new List<string>()
+            };
+
+            var currentIndex = 0;
+
+            foreach (var line in File.ReadAllLines(@".\Day4\input.txt"))
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    result.Add(new List<string>());
+                    ++currentIndex;
+                    continue;
+                }
+
+                result[currentIndex].Add(line);
+            }
+
+            return result;
         }
     }
 }
