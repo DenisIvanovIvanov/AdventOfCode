@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AdventOfCode2020.Day3
@@ -16,22 +17,15 @@ namespace AdventOfCode2020.Day3
 
         public void PartOne()
         {
-            int trees = 0;
-            int rightIndex = 0;
+            int trees = 1;
 
-            foreach (var line in _input)
+            int[][] slopes = new int[][]
             {
-                if (rightIndex >= line.Length)
-                {
-                    rightIndex -= line.Length;
-                }
+                new int[] { 3, 1}
+            };
 
-                var block = line.Substring(rightIndex, 1);
-                if (block == "#")
-                    trees++;
-
-                rightIndex += 3;
-            }
+            foreach (var slopeTrees in YieldSlopeTrees(slopes))
+                trees *= slopeTrees;
 
             Console.WriteLine(trees);
         }
@@ -49,6 +43,14 @@ namespace AdventOfCode2020.Day3
             };
 
             long sum = 1;
+            foreach (var slopeTrees in YieldSlopeTrees(slopes))
+                sum *= slopeTrees;
+
+            Console.WriteLine(sum);
+        }
+
+        private IEnumerable<int> YieldSlopeTrees(int[][] slopes)
+        {
             for (int j = 0; j < slopes.Length; j++)
             {
                 var slope = slopes[j];
@@ -69,10 +71,8 @@ namespace AdventOfCode2020.Day3
                     rightIndex += slope[0];
                 }
 
-                sum *= trees;
+                yield return trees;
             }
-
-            Console.WriteLine(sum);
         }
     }
 }
