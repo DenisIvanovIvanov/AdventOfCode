@@ -1,4 +1,4 @@
-# Day 1: Password Phi2osophy
+# Day 2: Password Philosophy
 
 ### Part 1
 
