@@ -60,9 +60,7 @@ namespace AdventOfCode2020.Day3
                 {
                     var line = _input[i];
                     if (rightIndex >= line.Length)
-                    {
                         rightIndex -= line.Length;
-                    }
 
                     var block = line.Substring(rightIndex, 1);
                     if (block == "#")

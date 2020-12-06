@@ -148,8 +148,7 @@ namespace AdventOfCode2020.Day4
                         }
 
                         return false;
-                    default:
-                        return false;
+                    default: return false;
                 }
             }
 
