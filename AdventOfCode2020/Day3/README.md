@@ -1,35 +1,69 @@
-# Day 1: Report Repair
+# Day 3: Toboggan Trajectory
 
 ### Part 1
 
-After saving Christmas five years in a row, you've decided to take a vacation at a nice resort on a tropical island. Surely, Christmas will go on without you.
+With the toboggan login problems resolved, you set off toward the airport. While travel by toboggan might be easy, it's certainly not safe: there's very minimal steering and the area is covered in trees. You'll need to see which angles will take you near the fewest trees.
 
-The tropical island has its own currency and is entirely cash-only. The gold coins used there have a little picture of a starfish; the locals just call them stars. None of the currency exchanges seem to have heard of them, but somehow, you'll need to find fifty of these coins by the time you arrive so you can pay the deposit on your room.
+Due to the local geology, trees in this area only grow on exact integer coordinates in a grid. You make a map (your puzzle input) of the open squares (.) and trees (#) you can see. For example:
 
-To save your vacation, you need to get all fifty stars by December 25th.
+    ..##.......
+    #...#...#..
+    .#....#..#.
+    ..#.#...#.#
+    .#...##..#.
+    ..#.##.....
+    .#.#.#....#
+    .#........#
+    #.##...#...
+    #...##....#
+    .#..#...#.#
+These aren't the only trees, though; due to something you read about once involving arboreal genetics and biome stability, the same pattern repeats to the right many times:
 
-Collect stars by solving puzzles. Two puzzles will be made available on each day in the Advent calendar; the second puzzle is unlocked when you complete the first. Each puzzle grants one star. Good luck!
+    ..##.........##.........##.........##.........##.........##.......  --->
+    #...#...#..#...#...#..#...#...#..#...#...#..#...#...#..#...#...#..
+    .#....#..#..#....#..#..#....#..#..#....#..#..#....#..#..#....#..#.
+    ..#.#...#.#..#.#...#.#..#.#...#.#..#.#...#.#..#.#...#.#..#.#...#.#
+    .#...##..#..#...##..#..#...##..#..#...##..#..#...##..#..#...##..#.
+    ..#.##.......#.##.......#.##.......#.##.......#.##.......#.##.....  --->
+    .#.#.#....#.#.#.#....#.#.#.#....#.#.#.#....#.#.#.#....#.#.#.#....#
+    .#........#.#........#.#........#.#........#.#........#.#........#
+    #.##...#...#.##...#...#.##...#...#.##...#...#.##...#...#.##...#...
+    #...##....##...##....##...##....##...##....##...##....##...##....#
+    .#..#...#.#.#..#...#.#.#..#...#.#.#..#...#.#.#..#...#.#.#..#...#.#  --->
+You start on the open square (.) in the top-left corner and need to reach the bottom (below the bottom-most row on your map).
 
-Before you leave, the Elves in accounting just need you to fix your expense report (your puzzle input); apparently, something isn't quite adding up.
+The toboggan can only follow a few specific slopes (you opted for a cheaper model that prefers rational numbers); start by counting all the trees you would encounter for the slope right 3, down 1:
 
-Specifically, they need you to find the two entries that sum to **2020** and then multiply those two numbers together.
+From your starting position at the top-left, check the position that is right 3 and down 1. Then, check the position that is right 3 and down 1 from there, and so on until you go past the bottom of the map.
 
-For example, suppose your expense report contained the following:
+The locations you'd check in the above example are marked here with O where there was an open square and X where there was a tree:
 
-    1721
-    979
-    366
-    299
-    675
-    1456
-In this list, the two entries that sum to `2020 are 1721 and 299`. Multiplying them together produces `1721 * 299 = 514579`, so the correct answer is **514579**.
+    ..##.........##.........##.........##.........##.........##.......  --->
+    #..O#...#..#...#...#..#...#...#..#...#...#..#...#...#..#...#...#..
+    .#....X..#..#....#..#..#....#..#..#....#..#..#....#..#..#....#..#.
+    ..#.#...#O#..#.#...#.#..#.#...#.#..#.#...#.#..#.#...#.#..#.#...#.#
+    .#...##..#..X...##..#..#...##..#..#...##..#..#...##..#..#...##..#.
+    ..#.##.......#.X#.......#.##.......#.##.......#.##.......#.##.....  --->
+    .#.#.#....#.#.#.#.O..#.#.#.#....#.#.#.#....#.#.#.#....#.#.#.#....#
+    .#........#.#........X.#........#.#........#.#........#.#........#
+    #.##...#...#.##...#...#.X#...#...#.##...#...#.##...#...#.##...#...
+    #...##....##...##....##...#X....##...##....##...##....##...##....#
+   .#..#...#.#.#..#...#.#.#..#...X.#.#..#...#.#.#..#...#.#.#..#...#.#  --->
+In this example, traversing the map using this slope would cause you to encounter 7 trees.
 
-Of course, your expense report is much larger. Find the two entries that sum to 2020; what do you get if you multiply them together?
+Starting at the top-left corner of your map and following a slope of right 3 and down 1, how many trees would you encounter?
 
 ### Part 2
 
-The Elves in accounting are thankful for your help; one of them even offers you a starfish coin they had left over from a past vacation. They offer you a second one if you can find three numbers in your expense report that meet the same criteria.
+Time to check the rest of the slopes - you need to minimize the probability of a sudden arboreal stop, after all.
 
-Using the above example again, `the three entries that sum to 2020 are 979, 366, and 675`. Multiplying them together produces the answer, **241861950**.
+Determine the number of trees you would encounter if, for each of the following slopes, you start at the top-left corner and traverse the map all the way to the bottom:
 
-In your expense report, what is the product of the three entries that sum to 2020?
+    Right 1, down 1.
+    Right 3, down 1. (This is the slope you already checked.)
+    Right 5, down 1.
+    Right 7, down 1.
+    Right 1, down 2.
+In the above example, these slopes would find 2, 7, 3, 4, and 2 tree(s) respectively; multiplied together, these produce the answer 336.
+
+What do you get if you multiply together the number of trees encountered on each of the listed slopes?
