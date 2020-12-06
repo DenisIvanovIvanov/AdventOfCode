@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace AdventOfCode2020.Day6
 {
-    public class DaySix : IAdventOfCode
+    public class DaySix : DayBase, IAdventOfCode
     {
         private readonly List<List<string>> _input;
 
-        public DaySix()
+        public DaySix() : base()
         {
-            _input = ParseInput();
+            _input = ParseInput(@".\Day6\input.txt");
         }
 
         public string Name => "Day 6";
@@ -37,30 +36,6 @@ namespace AdventOfCode2020.Day6
             }
 
             Console.WriteLine(total);
-        }
-
-        private List<List<string>> ParseInput()
-        {
-            var result = new List<List<string>>()
-            {
-                new List<string>()
-            };
-
-            var currentIndex = 0;
-
-            foreach (var line in File.ReadAllLines(@".\Day6\input.txt"))
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    result.Add(new List<string>());
-                    ++currentIndex;
-                    continue;
-                }
-
-                result[currentIndex].Add(line);
-            }
-
-            return result;
         }
     }
 }

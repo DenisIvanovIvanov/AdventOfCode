@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode2020.Day4
 {
-    public class DayFour : IAdventOfCode
+    public class DayFour : DayBase, IAdventOfCode
     {
         private readonly HashSet<string> _requiredFields = new HashSet<string>
         {
@@ -24,7 +23,7 @@ namespace AdventOfCode2020.Day4
 
         public string Name => "Day 4";
 
-        public DayFour()
+        public DayFour() : base()
         {
             _validPassports = GetAllPassportsHavingRequiredKeys();
         }
@@ -96,7 +95,7 @@ namespace AdventOfCode2020.Day4
 
         private List<string> GetAllPassportsHavingRequiredKeys()
         {
-            var passports = ParsePassports();
+            var passports = ParseInput(@".\Day4\input.txt");
             var validPassports = new List<string>();
 
             foreach (var passport in passports)
@@ -108,30 +107,6 @@ namespace AdventOfCode2020.Day4
             }
 
             return validPassports;
-        }
-
-        private List<List<string>> ParsePassports()
-        {
-            var result = new List<List<string>>()
-            {
-                new List<string>()
-            };
-
-            var currentIndex = 0;
-
-            foreach (var line in File.ReadAllLines(@".\Day4\input.txt"))
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    result.Add(new List<string>());
-                    ++currentIndex;
-                    continue;
-                }
-
-                result[currentIndex].Add(line);
-            }
-
-            return result;
         }
     }
 }
