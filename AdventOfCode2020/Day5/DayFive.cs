@@ -9,7 +9,7 @@ namespace AdventOfCode2020.Day5
     {
         private string[] _input;
 
-        public string Name => "Day 5";
+        public string Name => "--- Day 5: Binary Boarding ---";
 
         private readonly HashSet<int> _seatId;
 

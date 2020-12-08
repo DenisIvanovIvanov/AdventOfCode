@@ -21,7 +21,7 @@ namespace AdventOfCode2020.Day4
         private readonly string _heightRegex = @"(cm|in)\b";
         private readonly string _hexColorRegex = @"^#(?:[0-9a-fA-F]{3}){1,2}$";
 
-        public string Name => "Day 4";
+        public string Name => "--- Day 4: Passport Processing ---";
 
         public DayFour() : base()
         {

@@ -13,7 +13,7 @@ namespace AdventOfCode2020.Day6
             _input = ParseInput(@".\Day6\input.txt");
         }
 
-        public string Name => "Day 6";
+        public string Name => "--- Day 6: Custom Customs ---";
 
         public void PartOne()
         {

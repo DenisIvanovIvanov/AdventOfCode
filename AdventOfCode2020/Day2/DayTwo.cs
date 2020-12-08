@@ -20,7 +20,7 @@ namespace AdventOfCode2020.Day2
             public string PasswordString { get; set; }
         }
 
-        public string Name => "Day 2";
+        public string Name => "--- Day 2: Password Philosophy ---";
 
         public DayTwo()
         {

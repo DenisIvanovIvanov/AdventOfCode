@@ -4,6 +4,8 @@ using AdventOfCode2020.Day3;
 using AdventOfCode2020.Day4;
 using AdventOfCode2020.Day5;
 using AdventOfCode2020.Day6;
+using AdventOfCode2020.Day7;
+using AdventOfCode2020.Day8;
 using System;
 
 namespace AdventOfCode2020
@@ -19,15 +21,17 @@ namespace AdventOfCode2020
                 new DayThree(),
                 new DayFour(),
                 new DayFive(),
-                new DaySix()
+                new DaySix(),
+                new DaySeven(),
+                new DayEight()
             };
             
             foreach (var solution in solutions)
             {
+                Console.WriteLine("===============================================");
                 Console.WriteLine(solution.Name);
                 solution.PartOne();
                 solution.PartTwo();
-                Console.WriteLine("===============================================");
             }
 
             Console.Read();

@@ -13,7 +13,7 @@ namespace AdventOfCode2020.Day3
             _input = File.ReadAllLines(@".\Day3\input.txt");
         }
 
-        public string Name => "Day 3";
+        public string Name => "--- Day 3: Toboggan Trajectory ---";
 
         public void PartOne()
         {

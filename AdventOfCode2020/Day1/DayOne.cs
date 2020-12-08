@@ -10,7 +10,7 @@ namespace AdventOfCode2020.Day1
         private readonly int[] _input;
         private const int TARGET = 2020;
 
-        public string Name => "Day 1";
+        public string Name => "--- Day 1: Report Repair ---";
 
         public DayOne()
         {
